@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Deobfuscator</title>
+    <link rel="stylesheet" href="assets/goon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Zenith <span class="accent">Deobfuscator</span></h1>
+            <p>Advanced Lua & MoonSec Script Recovery</p>
+        </header>
+
+        <div class="upload-zone" id="drop-zone">
+            <div class="icon-container">
+                <i class="fa-solid fa-file-code"></i>
+            </div>
+            <h3>Drag & Drop or Paste Code</h3>
+            <p>Supported formats: .txt, .lua</p>
+            
+            <input type="file" id="file-input" accept=".txt,.lua" hidden>
+            <button class="browse-btn" onclick="document.getElementById('file-input').click()">Browse Files</button>
+            
+            <div class="divider">OR</div>
+            
+            <textarea id="text-input" placeholder="Paste your obfuscated script here..."></textarea>
+        </div>
+
+        <button id="deobf-btn" class="action-btn">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Deobfuscate
+        </button>
+
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <script src="assets/wtf.js"></script>
+</body>
+</html>
