@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith Deobfuscator</title>
+    <link rel="stylesheet" href="new/assets/goon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #050507;
+            background-image: radial-gradient(circle at center, rgba(120,0,255,0.25), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(0,150,255,0.25), transparent 40%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+        .neo-wrapper {
+            width: 100%;
+            max-width: 700px;
+            padding: 2.5rem;
+            border-radius: 20px;
+            background: rgba(20, 20, 30, 0.45);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 0 40px rgba(140, 80, 255, 0.35);
+            animation: wrapperFade 0.8s ease;
+        }
+        @keyframes wrapperFade { from { opacity:0; transform:scale(.96);} to { opacity:1; transform:scale(1);} }
+        .title {
+            text-align: center;
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            letter-spacing: -1px;
+        }
+        .title span {
+            background: linear-gradient(90deg, #a06bff, #d470ff);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shine 2s linear infinite;
+        }
+        @keyframes shine { 0% { filter:brightness(1);} 50% { filter:brightness(1.4);} 100% { filter:brightness(1);} }
+        .subtitle {
+            text-align: center;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        .subtitle span {
+            display:inline-block;
+            margin: 0 4px;
+            position: relative;
+        }
+        .subtitle span::before {
+            content: '•';
+            position: absolute;
+            left: -6px;
+            color: #cba6ff;
+        }
+        .holo-zone {
+            border: 2px dashed rgba(160, 120, 255, 0.4);
+            padding: 2rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .holo-zone.drag-over {
+            background: rgba(160, 120, 255, 0.1);
+            border-color: #cba6ff;
+        }
+        .holo-zone i {
+            font-size: 3.2rem;
+            color: #cba6ff;
+            margin-bottom: 0.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-6px);} }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 1rem;
+            background: rgba(10,10,15,0.9);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            resize: vertical;
+            font-family: monospace;
+        }
+        .main-btn {
+            width: 100%;
+            margin-top: 1.7rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            background: linear-gradient(90deg, #9b5cff, #b368ff);
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.35s;
+            box-shadow: 0 0 25px rgba(150,60,255,0.45);
+        }
+        .main-btn:hover { transform: translateY(-3px); box-shadow:0 0 40px rgba(180,80,255,0.7); }
+        #post-complete-box {
+            display: none;
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 1.2rem;
+            opacity:0;
+            animation: fadeUp 0.6s ease forwards;
+        }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:translateY(0);} }
+        * { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(8px);} to { opacity:1; transform:translateY(0);} }
+    </style>
+</head>
+<body>
+<div class="neo-wrapper">
+    <div class="title">Zenith <span>Deobfuscator</span></div>
+    <div class="subtitle">
+        <span>Advanced Lua</span>
+        <span>MoonSec Script</span>
+        <span>Recovery</span>
+    </div>
+    <div style="text-align:center; margin-bottom:1rem;">
+        <a href="https://zenith.loophole.site/" target="_blank" style="color:#cba6ff; font-weight:600; text-decoration:underline;">Original Site</a>
+    </div>
+    <div class="holo-zone" id="drop-zone">
+        <i class="fa-solid fa-code"></i>
+        <p><b>Drop your obfuscated file here</b></p>
+        <p style="opacity:.6">or paste code below</p>
+        <input type="file" id="file-input" hidden accept=".txt,.lua">
+        <button class="main-btn" onclick="document.getElementById('file-input').click()">Choose File</button>
+        <textarea id="text-input" placeholder="Paste Lua or MoonSec code..."></textarea>
+    </div>
+    <button id="deobf-btn" class="main-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Deobfuscate</button>
+    <div id="status" style="text-align:center; margin-top:1rem; min-height:1.2em;"></div>
+    <div id="post-complete-box">
+        ✔ Your file was successfully deobfuscated!<br><br>
+        Now go to <a href="https://luadec.metaworm.site/" target="_blank">luadec.metaworm.site</a><br>
+        Drag & Drop your downloaded file into it,<br>
+        then copy the Lua and run it through <a href="https://chatgpt.com/" target="_blank">ChatGPT</a> to make it readable/cleaner.
+    </div>
+</div>
+<script src="new/assets/wtf.js"></script>
+<script>
+const observer = new MutationObserver(() => {
+    const status = document.getElementById('status').textContent;
+    if (status.includes('Success')) {
+        document.getElementById('post-complete-box').style.display = 'block';
+    }
+});
+observer.observe(document.getElementById('status'), { childList: true });
+const realCreateObjectURL = URL.createObjectURL;
+URL.createObjectURL = (...args) => {
+    const out = realCreateObjectURL(...args);
+    setTimeout(() => {
+        const a = document.querySelector('a[download]');
+        if (a) a.download = "Deobfuscated.lua";
+    }, 10);
+    return out;
+};
+</script>
+</body>
+</html>
